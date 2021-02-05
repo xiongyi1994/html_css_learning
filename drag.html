@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>drag</title>
+    <style>
+        .move-bar {
+            background-color: brown;
+            width: 200px;
+            height: 200px;
+            position: fixed;
+            top: 100px;
+            left: 100px;
+            cursor: pointer;
+            transition: all .1s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="move-bar"></div>
+    <script>
+        class DragDIO {
+            constructor(ele) {
+                console.log(ele);
+                this.ele = ele;
+                console.log(this.ele);
+                this.moveable = false;
+                this.X = 0;
+                this.Y = 0;
+            }
+            start() {
+                let _this = this;
+                this.ele.addEventListener("mousedown", (evt) => {
+                    _this.moveable = true;
+                    _this.X = evt.offsetX;
+                    _this.Y = evt.offsetY;
+                })
+                document.addEventListener("mouseup", (evt) => {
+                    _this.moveable = false;
+                    _this.X = 0;
+                    _this.Y = 0;
+                })
+                document.addEventListener("mousemove", (evt) => {
+                    if (!_this.moveable) return;
+                    const W = _this.ele.offsetWidth, H = _this.ele.offsetHeight;
+                    const wWidth = window.innerWidth - W, wHeight = window.innerHeight - H;
+                    let disX = evt.clientX - _this.X;
+                    let disY = evt.clientY - _this.Y;
+                    disX = (disX < 0) ? 0 : (disX > wWidth ? wWidth : disX);
+                    disY = (disY < 0) ? 0 : (disY > wHeight ? wHeight : disY);
+                    _this.ele.style.left = disX + "px";
+                    _this.ele.style.top = disY + "px";
+                })
+            }
+        }
+        const oDiv = document.querySelector(".move-bar");
+        new DragDIO(oDiv).start();
+    </script>
+</body>
+
+</html>
