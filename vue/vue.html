@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html,
+        body,
+        .sky {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(#000, #222, #444, #666, #aaa, #fff);
+            overflow: hidden;
+        }
+
+        .snow {
+            position: absolute;
+            font-size: 44px;
+            color: #fff;
+            transition: 0.1s linear;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sky">
+    </div>
+    <script>
+        const _body = document.querySelector(".sky");
+        const width = document.body.offsetWidth;
+        const height = document.body.offsetHeight;
+        class Fly {
+            constructor(left, size) {
+                this.left = left;
+                this.size = size;
+                this.top = 0;
+                this.init();
+            }
+            init() {
+                let _snow = document.createElement("div");
+                _snow.innerText = "❄";
+                _snow.className = "snow";
+                _snow.style.left = this.left + "px";
+                _snow.style.top = "0";
+                _snow.style.fontSize = this.size + "px";
+                this._snow = _snow;
+                _body.appendChild(_snow);
+                this.run()
+            }
+            run() {
+                setInterval(() => {
+                    let _w = parseInt(this._snow.style.left);
+                    let _h = parseInt(this._snow.style.top);
+                    if (_w > width - 100 || _h > height - 100) {
+                        _body.removeChild(this._snow);
+                        this.left = parseInt(Math.random() * width);
+                        this.size = parseInt(Math.random() * 100);
+                        this.top = "0";
+                        this.init();
+                    } else {
+                        _w = _w + 1 + "px";
+                        _h = _h + 4 + "px";
+                        this._snow.style.left = _w;
+                        this._snow.style.top = _h;
+                    }
+                }, 100)
+            }
+        }
+        let i = 0;
+        let timer = setInterval(() => {
+            if (i > 99) clearInterval(timer);
+            i++;
+            new Fly(parseInt(Math.random() * width), parseInt(Math.random() * 100))
+        }, 500)
+    </script>
+</body>
+
+</html>
